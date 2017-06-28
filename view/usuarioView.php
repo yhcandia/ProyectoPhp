@@ -59,7 +59,12 @@
         </style>
     </head>
     <body style="background-color:#9E9E9E;" >
-   
+        <?php if(isset($_SESSION['mensaje']) ) { ?>
+        <script>alert("<?php echo $_SESSION['mensaje'];?>");</script>
+        <?php  
+        unset($_SESSION['mensaje']);
+         }
+        ?>
         <div class="principal">
             <div class="container2" style="padding-bottom:100px;">           
                 <div class="row">
@@ -154,7 +159,7 @@
                                                                             <div class="form-group"><label>Nombre Completo:</label> <input required="" type="text" name="nombreUsuario" value="<?php echo $row['nombreusuario']; ?>" class="form-control"/></div>
                                                                             <div class="form-group"><label>Perfil: </label>
                                                                                 <select name="idperfil" class="form-control" required=""/>     
-                                                                                <option value="">-- Seleccione --</option>
+                                                                                <option value="0">-- Seleccione --</option>
                                                                                 <?php
                                                                                 
                                                                                 foreach ($perfiles as $roww) {
@@ -176,8 +181,12 @@
                                                                 </div><!-- /.modal-content -->
                                                             </div><!-- /.modal-dialog -->
                                                         </div><!-- /.modal --> 
-                                                    </td>     
+                                                    </td>  
+                                                    <?php if($row['idusuario']!="1"){ ?>
                                                     <td><a href="#" title="Desactivar" onClick="confirmarRemover(<?php echo $row['idusuario']; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
+                                                    <?php } else {?>
+                                                    <td></td>
+                                                    <?php }?>
                                                     <td></td>
                                                 </tr>                                 
                                                 <?php
