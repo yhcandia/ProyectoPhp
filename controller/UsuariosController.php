@@ -18,7 +18,18 @@ class UsuariosController extends ControladorBase {
 
     public function index() {
 
-        
+         if (isset($_SESSION['session'])) {
+            if ($_SESSION["session"]["idRol"] == "1") {
+
+                if (isset($_REQUEST["name"])) {
+                    $this->buscarNombreUsuario();
+                } else {
+
+                    $this->mostrarUsuarios();
+                }
+            }
+            
+        }
         $this->mostrarUsuarios();
     }
 
@@ -105,11 +116,12 @@ class UsuariosController extends ControladorBase {
     }
 
     public function mostrarUsuarios(){
+        
          $query = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil ORDER BY idusuario ASC";
                         $res = $this->adapter->query($query);
 
                         $num_registros = mysqli_num_rows($res);
-                        $resul_x_pagina = 6;
+                        $resul_x_pagina = 3;
 
                         $paginacion = new Zebra_Pagination();
                         $paginacion->records($num_registros);
@@ -201,6 +213,38 @@ class UsuariosController extends ControladorBase {
         } else {
             return false;
         }
+    }
+    public function buscarNombreUsuario(){
+         if (isset($_REQUEST["name"])) {
+
+            $name = utf8_encode($_REQUEST['name']);
+
+            $query = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil WHERE nombreusuario LIKE '%" . $name . "%' ORDER BY nombreusuario ASC";
+            $res = $this->adapter->query($query);
+            $num_registros = mysqli_num_rows($res);
+
+            $resul_x_pagina = 3;
+
+            $paginacion = new Zebra_Pagination();
+            $paginacion->records($num_registros);
+            $paginacion->records_per_page($resul_x_pagina);
+
+            $consulta = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil WHERE nombreusuario LIKE '%" . $name . "%' ORDER BY nombreusuario ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
+            $result = $this->adapter->query($consulta);
+            $allperfiles = $this->adapter->query("SELECT * FROM perfil");
+                         while ($row = $allperfiles->fetch_object()) {
+                             $resultSet[]=$row;
+                        }
+            $this->view("usuario", array(
+                "paginacion" => $paginacion,
+                "num_registros" => $num_registros,
+                "result" => $result,
+                "perfiles" => $resultSet,
+                "buscado" => $name
+            ));
+        }else{
+            $this->redirect("Usuarios", "mostrarUsuarios");
+        }     
     }
 }
 
