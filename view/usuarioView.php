@@ -190,11 +190,11 @@ function Rut(texto)
         unset($_SESSION['mensaje']);
          }
         ?>
-             <form action="<?php echo $helper->url("usuarios", "index"); ?>" method="post">
+             <form action="<?php echo $helper->url("usuarios", "buscarNombreUsuario"); ?>" method="post">
                         <div class="form-group">
                             <label>Buscar: </label>
-                            <?php if(isset($buscado)) {?>
-                            <input type="text" class="form-control" name="name" value="<?php echo $buscado ?>" class="form-control"/>
+                            <?php if(isset($_SESSION['buscado'])) {?>
+                            <input type="text" class="form-control" name="name" value="<?php echo $_SESSION['buscado']; ?>" class="form-control"/>
                             <?php }else{ ?>
                              <input type="text" class="form-control" name="name" class="form-control"/>
                             <?php } ?>

@@ -137,10 +137,13 @@ class UsuariosController extends ControladorBase {
                         ));
     }
     public function buscarNombreUsuario(){
-         if (isset($_REQUEST["name"])) {
-
-            $name = utf8_encode($_REQUEST['name']);
-
+         if (isset($_REQUEST["name"]) || isset($_SESSION['buscado'])) {
+            if(isset($_REQUEST["name"])){
+             $name = utf8_encode($_REQUEST['name']);
+            }else{
+             $name = utf8_encode($_SESSION['buscado']);
+            
+            }
             $query = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil WHERE nombreusuario LIKE '%" . $name . "%' ORDER BY nombreusuario ASC";
             $res = $this->adapter->query($query);
             $num_registros = mysqli_num_rows($res);
@@ -157,12 +160,13 @@ class UsuariosController extends ControladorBase {
                          while ($row = $allperfiles->fetch_object()) {
                              $resultSet[]=$row;
                         }
+            $_SESSION['buscado']=$name;
             $this->view("usuario", array(
                 "paginacion" => $paginacion,
                 "num_registros" => $num_registros,
                 "result" => $result,
-                "perfiles" => $resultSet,
-                "buscado" => $name
+                "perfiles" => $resultSet
+               
             ));
         }else{
             $this->redirect("Usuarios", "mostrarUsuarios");
