@@ -198,6 +198,41 @@ function Rut(texto)
                             <?php }else{ ?>
                              <input type="text" class="form-control" name="name" class="form-control"/>
                             <?php } ?>
+                             <select name="buscarpor"  class="form-control" required=""/>     
+
+                             <?php if (isset($_SESSION['buscarpor'])) { ?>
+                                 <option value="<?php echo $_SESSION['buscarpor'] ?>" selected="<?php echo $_SESSION['buscarpor'] ?>">
+                                     <?php if ($_SESSION['buscarpor'] == "nombreusuario") { ?>
+                                     Buscar por Nombre </option> 
+                                     <option value="nombre">Buscar por Perfil</option>
+                                     <option value="rut">Buscar por RUT</option>
+                                     <option value="idusuario">Buscar por ID de usuario</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "nombre") { ?>
+                                     Buscar por Perfil </option> 
+                                     <option value="nombreusuario">Buscar por Nombre</option>
+                                     <option value="rut">Buscar por RUT</option>
+                                     <option value="idusuario">Buscar por ID de usuario</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "rut") { ?>
+                                     Buscar por RUT </option> 
+                                     <option value="nombreusuario">Buscar por Nombre</option>
+                                     <option value="nombre">Buscar por Perfil</option>
+                                     <option value="idusuario">Buscar por ID de usuario</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "idusuario") { ?>
+                                     Buscar por ID de usuario </option> 
+                                     <option value="nombreusuario">Buscar por Nombre</option>
+                                     <option value="nombre">Buscar por Perfil</option>
+                                     <option value="rut">Buscar por RUT</option>
+                                 <?php } ?>
+
+
+                             <?php } else { ?>
+                                 <option value="nombreusuario">Buscar por Nombre</option>
+                                 <option value="nombre">Buscar por Perfil</option>
+                                 <option value="rut">Buscar por RUT</option>
+                                 <option value="idusuario">Buscar por ID de usuario</option>
+                             <?php } ?>
+                             </select></div>
+                             
                         </div>        
                         <div class="form-group">
                             <input type="submit"  value="buscar" class="btn btn-default"/>
@@ -273,17 +308,17 @@ function Rut(texto)
                                         </thead>
                                         <tbody>                          
                                             <?php
-                                            while ($row = mysqli_fetch_array($result)) {
+                                            foreach($result as $row) {
                                                 ?>                                 
                                                 <tr>
                                                     <td><span class="glyphicon glyphicon-user"></span></td>
-                                                    <td><?php echo $row['idusuario']; ?></td>
-                                                    <td><?php echo $row['rut']; ?></td>
-                                                    <td><?php echo $row['nombreusuario']; ?></td>
-                                                    <td><?php echo $row['nombre']; ?></td>
+                                                    <td><?php echo $row->idusuario; ?></td>
+                                                    <td><?php echo $row->rut; ?></td>
+                                                    <td><?php echo $row->nombreusuario; ?></td>
+                                                    <td><?php echo $row->nombre; ?></td>
                                                     <td>
-                                                       <a data-toggle="modal" href="#ModalEditar<?php echo $row['idusuario'] ?>" title="Editar" class="btn btn-info glyphicon glyphicon-edit"></a>
-                                                        <div class="modal fade" id="ModalEditar<?php echo $row['idusuario'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                       <a data-toggle="modal" href="#ModalEditar<?php echo $row->idusuario ?>" title="Editar" class="btn btn-info glyphicon glyphicon-edit"></a>
+                                                        <div class="modal fade" id="ModalEditar<?php echo $row->idusuario ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
 
@@ -293,17 +328,17 @@ function Rut(texto)
                                                                         <h4 class="modal-title">Editar</h4>
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form action="<?php echo $helper->url("usuarios", "update"); ?>&id=<?php echo $row['idusuario']; ?>" method="post">
-                                                                            <div class="form-group"><input type="hidden" name="rut" maxlength="12" value="" readonly="" disabled  class="form-control"/></div>
-                                                                            <div class="form-group"><label>Rut:</label> <input required="" type="text" name="rutUsuario" value="<?php echo $row['rut']; ?>"    class="form-control" disabled/></div>
-                                                                            <div class="form-group"><label>Nombre Completo:</label> <input required="" type="text" name="nombreUsuario" value="<?php echo $row['nombreusuario']; ?>" class="form-control"/></div>
+                                                                        <form role="form" name="form2" action="<?php echo $helper->url("usuarios", "update"); ?>" method="post">
+                                                                            <div class="form-group"><label>ID:</label> <input required="" type="text" name="id" value="<?php echo $row->idusuario; ?>" readonly=""   class="form-control" /></div>
+                                                                            <div class="form-group"><label>Rut:</label> <input required="" type="text" name="rutUsuarioe" value="<?php echo $row->rut; ?>"   readonly=""  class="form-control" /></div>
+                                                                            <div class="form-group"><label>Nombre Completo:</label> <input required="" type="text" name="nombreUsuarioe" value="<?php echo $row->nombreusuario; ?>" class="form-control"/></div>
                                                                             <div class="form-group"><label>Perfil: </label>
-                                                                                <select name="idperfil" class="form-control" required=""/>     
+                                                                                <select name="idperfile" class="form-control" required=""/>     
                                                                                 <option value="0">-- Seleccione --</option>
                                                                                 <?php
                                                                                 
                                                                                 foreach ($perfiles as $roww) {
-                                                                                    if ($roww->idperfil == $row['idperfil']) {
+                                                                                    if ($roww->idperfil == $row->idperfil) {
                                                                                         ?>
 
                                                                                         <option selected value="<?php echo $roww->idperfil; ?>"><?php echo $roww->nombre; ?></option>
@@ -314,7 +349,7 @@ function Rut(texto)
                                                                                 }
                                                                                 ?>
                                                                                 </select></div>
-                                                                            <div class="form-group"><label>Contraseña:</label> <input required="" type="password" name="password" value="" class="form-control"/></div>
+                                                                            <div class="form-group"><label>Contraseña:</label> <input type="password" placeholder="(no cambie este campo, para conservar la anterior)" name="passworde" value="" class="form-control"/></div>
                                                                             <button type="submit" class="btn btn-default">Editar</button>
                                                                         </form>
                                                                     </div>
@@ -322,8 +357,8 @@ function Rut(texto)
                                                             </div><!-- /.modal-dialog -->
                                                         </div><!-- /.modal --> 
                                                     </td>  
-                                                    <?php if($row['idusuario']!="1"){ ?>
-                                                    <td><a href="#" title="Desactivar" onClick="confirmarRemover(<?php echo $row['idusuario']; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
+                                                    <?php if($row->idusuario!="1"){ ?>
+                                                    <td><a href="#" title="Desactivar" onClick="confirmarRemover(<?php echo $row->idusuario; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
                                                     <?php } else {?>
                                                     <td></td>
                                                     <?php }?>

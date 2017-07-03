@@ -24,7 +24,7 @@
                         if ($_SESSION['session']['idRol'] == '1') {
                             ?>    
                             <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
-                            <li><a href="./index.php?controller=usuarios&action=mostrarUsuarios"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
+                            <li><a href="./index.php?controller=usuarios&action=index"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
                             <?php
                         }
                         if ($_SESSION['session']['idRol'] == '2') {

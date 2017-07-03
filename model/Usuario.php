@@ -63,6 +63,15 @@ class Usuario extends EntidadBase{
         $this->db()->error;
         return $update;
     }
+    public function updateSinClave(){
+        $query="UPDATE usuario SET "
+                . "rut = '$this->rut',"
+                . "nombreusuario = '$this->nombre',"
+                . "perfil_idperfil = '$this->idperfil' where idusuario= '$this->id'";
+        $update=$this->db()->query($query);
+        $this->db()->error;
+        return $update;
+    }
     
     public function save(){
         $query="INSERT INTO usuario (rut,nombreusuario,clave,perfil_idperfil)
