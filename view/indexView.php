@@ -20,7 +20,8 @@
             }
             .container {
                 position: absolute;
-                left: 50%;
+                margin-top:15%;
+                left: 50%;          
                 transform: translateX(-50%) translateY(-50%);
             }
         </style>
@@ -28,9 +29,9 @@
         
     </body>
     <div class="container" style="color: white;">
-        <div style="width: 100%;text-align: center;position: relative;float: left;top: 200px; "><h1><b>Sistema Bufete.</b></h1></div>
-        <div style="width: 100%;text-align: center;position: relative;float: left;top: 210px   "><img src="view/img/martillo.png" width="200px" height="30%"></div>
-        <div style="width: 100%;text-align: center;position: relative; float: left;top: 220px "><b><h1>
+        <div style="width: 100%;text-align: center;position: relative;float: left;top: 0px; "><h1><b>Sistema Bufete.</b></h1></div>
+        <div style="width: 100%;text-align: center;position: relative;float: left;top: 50px   "><img src="view/img/martillo.png" width="200px" height="30%"></div>
+        <div style="width: 100%;text-align: center;position: relative; float: left;top: 80px "><b><h1>
            <?php if($_SESSION["session"]["idRol"]==1){ ?>
                SUPER ADMINISTRADOR
            <?php }if($_SESSION["session"]["idRol"]==2){ ?>
