@@ -191,14 +191,15 @@ function Rut(texto)
          }
         ?>
              <form action="<?php echo $helper->url("usuarios", "buscarNombreUsuario"); ?>" method="post">
-                        <div class="form-group">
-                            <label>Buscar: </label>
+                 <div class="form-group" style="width: 100%;text-align: center">
+                     <center>
+                            <label>Buscar:</label>
                             <?php if(isset($_SESSION['buscado'])) {?>
-                            <input type="text" class="form-control" name="name" value="<?php echo $_SESSION['buscado']; ?>" class="form-control"/>
+                            <input type="text" class="form-control" style="width: 30%;" name="name" value="<?php echo $_SESSION['buscado']; ?>" class="form-control"/>
                             <?php }else{ ?>
-                             <input type="text" class="form-control" name="name" class="form-control"/>
+                             <input type="text" class="form-control" style="width: 30%" name="name" class="form-control"/>
                             <?php } ?>
-                             <select name="buscarpor"  class="form-control" required=""/>     
+                             <select name="buscarpor"  class="form-control" style="width: 30%" required=""/>     
 
                              <?php if (isset($_SESSION['buscarpor'])) { ?>
                                  <option value="<?php echo $_SESSION['buscarpor'] ?>" selected="<?php echo $_SESSION['buscarpor'] ?>">
@@ -231,12 +232,13 @@ function Rut(texto)
                                  <option value="rut">Buscar por RUT</option>
                                  <option value="idusuario">Buscar por ID de usuario</option>
                              <?php } ?>
-                             </select></div>
-                             
-                        </div>        
-                        <div class="form-group">
+                             </select>
+                         <div class="form-group" >
                             <input type="submit"  value="buscar" class="btn btn-default"/>
                         </div>  
+                     </center>
+                 </div>                                
+                       
                     </form>
 
         
@@ -385,7 +387,7 @@ function Rut(texto)
                         } else {
                             ?>
                             <div class="panel panel-default col-md-8 center-block">
-                                <div class="panel-body">                
+                                <div class="panel-body" style="text-align: center">                
                                     <h4>Aviso!!!</h4> No hay datos para mostrar<br>
                                     <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
                                 </div>
