@@ -1,6 +1,6 @@
 <?php
 
-class ClientesController extends ControladorBase {
+class AbogadosController extends ControladorBase {
 
     public $conectar;
     public $adapter;
@@ -24,14 +24,14 @@ class ClientesController extends ControladorBase {
                 if (isset($_SESSION["buscado"]) && isset($_SESSION["buscarpor"])) {
                     unset($_SESSION["buscado"]);
                     unset($_SESSION["buscarpor"]);
-                    $this->mostrarClientes();
+                    $this->mostrarAbogados();
                 } else {
 
-                    $this->mostrarClientes();
+                    $this->mostrarAbogados();
                 }
             }
         }
-        $this->mostrarClientes();
+        $this->mostrarAbogados();
     }
 
     public function login() {
@@ -60,75 +60,62 @@ class ClientesController extends ControladorBase {
 
     public function logout() {
         session_destroy();
-        $this->redirect("Clientes", "index");
+        $this->redirect("Abogados", "index");
     }
 
     public function crear() {
         $rutValida = $_REQUEST["rutUsuario"]; 
-        $queryValida="SELECT * FROM cliente where rut='$rutValida'";
+        $queryValida="SELECT * FROM abogado where rut='$rutValida'";
         $res = $this->adapter->query($queryValida);
         $num_registros = mysqli_num_rows($res);
         if($num_registros<=0){
             if (isset($_REQUEST["rutUsuario"])) {
 
                 //Creamos un usuario
-                $cliente = new Cliente($this->adapter);
-                $cliente->setRut($_REQUEST["rutUsuario"]);
-                $cliente->setNombre($_REQUEST["nombreCliente"]);
-                $cliente->setDireccion($_REQUEST["direccionCliente"]);
-                $cliente->setTelefono($_REQUEST["telefonoCliente"]);
-                $cliente->setFechaIncoporacion($_REQUEST["fechaCliente"]);
-                $cliente->setTipoPersona($_REQUEST["TipoPersona"]);
-                $cliente->setClave(md5($_REQUEST["password"]));
-                $save = $cliente->save();
-                $_SESSION["mensaje"]="El cliente se ha ingresado correctamente";
+                $abogado = new Abogado($this->adapter);
+                $abogado->setRut($_REQUEST["rutUsuario"]);
+                $abogado->setNombreCompleto($_REQUEST["nombreAbogado"]);
+                $abogado->setEspecialidad($_REQUEST["especialidadAbogado"]);
+                $abogado->setFechaContratacion($_REQUEST["fechaAbogado"]);
+                $abogado->setValorHora($_REQUEST["valorAbogado"]);
+                $save = $abogado->save();
+                $_SESSION["mensaje"]="El abogado se ha ingresado correctamente";
             }
         }else{
-               $_SESSION["mensaje"]="El cliente ya existe!";
+               $_SESSION["mensaje"]="El abogado ya existe!";
         }
-        $this->redirect("Clientes", "index");
+        $this->redirect("abogados", "index");
     }
 
     public function update() {
 
         if (isset($_REQUEST["id"])) {
 
-            //Creamos un usuario
-
-            $cliente = new Cliente($this->adapter);
-            $cliente->setId($_REQUEST["id"]);
-            $cliente->setRut($_REQUEST["rutClientee"]);
-            $cliente->setNombre($_REQUEST["nombreClientee"]);
-            $cliente->setTelefono($_REQUEST["telefonoClientee"]);
-            $cliente->setDireccion($_REQUEST["direccionClientee"]);
-            $cliente->setFechaIncoporacion($_REQUEST["fechaClientee"]);
-            $cliente->setTipoPersona($_REQUEST["TipoPersonae"]);
-            $clavel=  trim($_REQUEST["passworde"]);
-             if($clavel != "")
-            {
-               $cliente->setClave(md5($_REQUEST["passworde"]));
-                $up=$cliente->update();
-                $_SESSION["mensaje"]="El cliente se ha modificado correctamente";
-            } else {
-                $up=$cliente->updateSinClave();
-                $_SESSION["mensaje"]="El cliente se ha modificado correctamente, manteniendo su clave";
-            }   
+            $abogado = new Abogado($this->adapter);
+            $abogado->setId($_REQUEST["id"]);
+            $abogado->setRut($_REQUEST["rutAbogadoe"]);
+            $abogado->setNombreCompleto($_REQUEST["nombreAbogadoe"]);
+            $abogado->setEspecialidad($_REQUEST["especialidadAbogadoe"]);
+            $abogado->setFechaContratacion($_REQUEST["fechaAbogadoe"]);
+            $abogado->setValorHora($_REQUEST["valorAbogadoe"]);
+            $up=$abogado->update();
+            $_SESSION["mensaje"]="El abogado se ha modificado correctamente";           
         }
-        $this->redirect("Clientes", "index");
+        $this->redirect("Abogados", "index");
     }
 
     public function borrar() {
         if (isset($_REQUEST["id"])) {
             $id = $_REQUEST["id"];
             $cliente = new Cliente($this->adapter);
-            $cliente->deleteByCliente($id);
+            $cliente->deleteByIdAbogado($id);
         }
-        $this->redirect("Clientes", "index");
+        $this->redirect("Abogados", "index");
     }
 
-    public function mostrarClientes() {
+    public function mostrarAbogados() {
 
-        $query = "SELECT * FROM cliente ORDER BY rut ASC";
+        $query = "SELECT * FROM abogado ORDER BY rut ASC";
         $res = $this->adapter->query($query);
 
         $num_registros = mysqli_num_rows($res);
@@ -138,7 +125,7 @@ class ClientesController extends ControladorBase {
         $paginacion->records($num_registros);
         $paginacion->records_per_page($resul_x_pagina);
 
-        $consulta = "SELECT * FROM cliente ORDER BY rut ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . ',' . $resul_x_pagina;
+        $consulta = "SELECT * FROM abogado ORDER BY rut ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . ',' . $resul_x_pagina;
         $result = $this->adapter->query($consulta);
 
         $allperfiles = $this->adapter->query("SELECT * FROM perfil");
@@ -151,14 +138,14 @@ class ClientesController extends ControladorBase {
                 $resultSet2[] = $roww;
             }
        
-            $this->view("cliente", array(
+            $this->view("abogado", array(
                 "paginacion" => $paginacion,
                 "num_registros" => $num_registros,
                 "result" => $resultSet2,
                 "perfiles" => $resultSet
             ));
         }else{
-              $this->view("cliente", array(
+              $this->view("abogado", array(
                 "paginacion" => $paginacion,
                 "num_registros" => $num_registros,
                 "result" => null,
@@ -167,7 +154,7 @@ class ClientesController extends ControladorBase {
         }
     }
 
-    public function buscarNombreCliente() {
+    public function buscarNombreAbogado() {
         if (isset($_REQUEST["name"]) || isset($_SESSION['buscado'])) {
             if (isset($_REQUEST["name"]) && isset($_REQUEST["buscarpor"])) {
                 $name = utf8_encode($_REQUEST['name']);
@@ -178,7 +165,7 @@ class ClientesController extends ControladorBase {
                 $name = trim($name);
                 $buscarpor = $_SESSION['buscarpor'];
             }
-            $query = "SELECT * FROM cliente WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC";
+            $query = "SELECT * FROM abogado WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC";
             $res = $this->adapter->query($query);
             $num_registros = mysqli_num_rows($res);
 
@@ -188,7 +175,7 @@ class ClientesController extends ControladorBase {
             $paginacion->records($num_registros);
             $paginacion->records_per_page($resul_x_pagina);
 
-            $consulta = "SELECT * FROM cliente WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
+            $consulta = "SELECT * FROM abogado WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
             $result = $this->adapter->query($consulta);
             $allperfiles = $this->adapter->query("SELECT * FROM perfil");
             while ($row = $allperfiles->fetch_object()) {
@@ -198,7 +185,7 @@ class ClientesController extends ControladorBase {
             $_SESSION['buscado'] = $name;
             $_SESSION['buscarpor'] = $buscarpor;
             if ($num_registros == 0) {
-                $this->view("cliente", array(
+                $this->view("abogado", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
                     "result" => NULL,
@@ -208,7 +195,7 @@ class ClientesController extends ControladorBase {
                 while ($roww = $result->fetch_object()) {
                     $resultSet2[] = $roww;
                 }
-                $this->view("cliente", array(
+                $this->view("abogado", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
                     "result" => $resultSet2,
@@ -216,7 +203,7 @@ class ClientesController extends ControladorBase {
                 ));
             }
         } else {
-            $this->redirect("Clientes", "mostrarClientes");
+            $this->redirect("Abogados", "mostrarAbogados");
         }
     }
 

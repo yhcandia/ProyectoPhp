@@ -118,7 +118,7 @@ class Cliente extends EntidadBase{
         return $update;
     }
     
-    public function save(){
+    public function save(){     
         $query="INSERT INTO cliente (rut,nombre_completo,fecha_incorporacion,tipo_persona,direccion,telefonos)
                 VALUES('".$this->rut."',
                        '".$this->nombrecliente."',
@@ -135,7 +135,9 @@ class Cliente extends EntidadBase{
         $this->db()->error;
         $save=$this->db()->query($query);
         $this->db()->error;
+       
         return $save;
+        
     }
 }
 ?>

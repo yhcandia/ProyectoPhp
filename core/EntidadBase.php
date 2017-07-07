@@ -127,6 +127,11 @@ class EntidadBase{
         return $resultSet;
     }
     
+    public function deleteByIdAbogado($id){
+        $query=$this->db->query("DELETE FROM abogado WHERE id='$id'"); 
+        return $query;
+    }
+    
     public function deleteById($id){
         $query=$this->db->query("DELETE FROM $this->table WHERE idusuario='$id'"); 
         return $query;
