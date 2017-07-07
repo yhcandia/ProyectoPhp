@@ -266,10 +266,12 @@ function Rut(texto)
                                                 <?php
                                                
                                                 foreach ($perfiles as $rowww) {
+                                                    if($rowww->idperfil != 5){
                                                     ?>
 
                                                      <option value="<?php echo $rowww->idperfil; ?>"><?php echo $rowww->nombre; ?></option>
                                                         <?php
+                                                    }
                                                     
                                                 }
                                                 ?>
@@ -340,15 +342,17 @@ function Rut(texto)
                                                                                 <?php
                                                                                 
                                                                                 foreach ($perfiles as $roww) {
-                                                                                    if ($roww->idperfil == $row->idperfil) {
-                                                                                        ?>
+                                                                                    if($roww->idperfil != 5){
+                                                                                        if ($roww->idperfil == $row->idperfil) {
+                                                                                            ?>
 
-                                                                                        <option selected value="<?php echo $roww->idperfil; ?>"><?php echo $roww->nombre; ?></option>
-                                                                                    <?php } else { ?>
-                                                                                        <option value="<?php echo $roww->idperfil; ?>"><?php echo $roww->nombre; ?></option>
-                                                                                        <?php
+                                                                                            <option selected value="<?php echo $roww->idperfil; ?>"><?php echo $roww->nombre; ?></option>
+                                                                                        <?php } else { ?>
+                                                                                            <option value="<?php echo $roww->idperfil; ?>"><?php echo $roww->nombre; ?></option>
+                                                                                            <?php
+                                                                                        }
                                                                                     }
-                                                                                }
+                                                                                 }
                                                                                 ?>
                                                                                 </select></div>
                                                                             <div class="form-group"><label>Contraseña:</label> <input type="password" placeholder="(no cambie este campo, para conservar la anterior)" name="passworde" value="" class="form-control"/></div>
