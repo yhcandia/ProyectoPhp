@@ -93,6 +93,7 @@ class Cliente extends EntidadBase{
                 . "clave = '$this->clave',"
                 . "perfil_idperfil = '$this->idperfil' where rut= '$this->rut'";
         $update2=$this->db()->query($query2);
+        $this->db()->error;
         $update=$this->db()->query($query);
         $this->db()->error;
         return $update;
@@ -111,6 +112,7 @@ class Cliente extends EntidadBase{
                 . "nombreusuario = '$this->nombrecliente',"
                 . "perfil_idperfil = '$this->idperfil' where rut= '$this->rut'";
         $update2=$this->db()->query($query2);
+        $this->db()->error;
         $update=$this->db()->query($query);
         $this->db()->error;
         return $update;
@@ -126,10 +128,11 @@ class Cliente extends EntidadBase{
                        '".$this->telefono."');";
         $query2="INSERT INTO usuario (rut,nombreusuario,clave,perfil_idperfil)
                 VALUES('".$this->rut."',
-                       '".$this->nombre."',
+                       '".$this->nombrecliente."',
                        '".$this->clave."',
                        '5');";
         $save2=$this->db()->query($query2);
+        $this->db()->error;
         $save=$this->db()->query($query);
         $this->db()->error;
         return $save;

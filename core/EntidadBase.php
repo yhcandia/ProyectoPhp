@@ -135,6 +135,15 @@ class EntidadBase{
         $query=$this->db->query("UPDATE $this->table SET estado_categoria='0' WHERE id_categoria='$id'"); 
         return $query;
     }
+    public function deleteByCliente($id){     
+        $query=$this->db->query("SELECT * FROM cliente WHERE id='$id'");
+        while($row = $query->fetch_object()) {
+             $query2=$this->db->query("DELETE FROM usuario WHERE rut='$row->rut'");;
+        }
+        $query2=$this->db->query("DELETE FROM cliente WHERE id='$id'"); 
+       
+        return $query2;
+    }
     public function darBaja($id){
         $query=$this->db->query("UPDATE $this->table SET estado_prestamo='0' WHERE id_prestamo='$id'"); 
         return $query;

@@ -1,6 +1,6 @@
 <?php
 
-class UsuariosController extends ControladorBase {
+class ClientesController extends ControladorBase {
 
     public $conectar;
     public $adapter;
@@ -93,6 +93,7 @@ class UsuariosController extends ControladorBase {
             $cliente->setRut($_REQUEST["rutClientee"]);
             $cliente->setNombre($_REQUEST["nombreClientee"]);
             $cliente->setTelefono($_REQUEST["telefonoClientee"]);
+            $cliente->setDireccion($_REQUEST["direccionClientee"]);
             $cliente->setFechaIncoporacion($_REQUEST["fechaClientee"]);
             $cliente->setTipoPersona($_REQUEST["TipoPersonae"]);
             $clavel=  trim($_REQUEST["passworde"]);
@@ -112,10 +113,8 @@ class UsuariosController extends ControladorBase {
     public function borrar() {
         if (isset($_REQUEST["id"])) {
             $id = $_REQUEST["id"];
-
-
             $cliente = new Cliente($this->adapter);
-            $cliente->deleteById($id);
+            $cliente->deleteByCliente($id);
         }
         $this->redirect("Clientes", "index");
     }
@@ -136,18 +135,29 @@ class UsuariosController extends ControladorBase {
         $result = $this->adapter->query($consulta);
 
         $allperfiles = $this->adapter->query("SELECT * FROM perfil");
+    
         while ($row = $allperfiles->fetch_object()) {
             $resultSet[] = $row;
         }
-        while ($roww = $result->fetch_object()) {
-            $resultSet2[] = $roww;
+        if ($num_registros != 0) {
+            while ($roww = $result->fetch_object()) {
+                $resultSet2[] = $roww;
+            }
+       
+            $this->view("cliente", array(
+                "paginacion" => $paginacion,
+                "num_registros" => $num_registros,
+                "result" => $resultSet2,
+                "perfiles" => $resultSet
+            ));
+        }else{
+              $this->view("cliente", array(
+                "paginacion" => $paginacion,
+                "num_registros" => $num_registros,
+                "result" => null,
+                "perfiles" => $resultSet
+            ));
         }
-        $this->view("cliente", array(
-            "paginacion" => $paginacion,
-            "num_registros" => $num_registros,
-            "result" => $resultSet2,
-            "perfiles" => $resultSet
-        ));
     }
 
     public function buscarNombreCliente() {
@@ -181,7 +191,7 @@ class UsuariosController extends ControladorBase {
             $_SESSION['buscado'] = $name;
             $_SESSION['buscarpor'] = $buscarpor;
             if ($num_registros == 0) {
-                $this->view("usuario", array(
+                $this->view("cliente", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
                     "result" => NULL,
@@ -191,7 +201,7 @@ class UsuariosController extends ControladorBase {
                 while ($roww = $result->fetch_object()) {
                     $resultSet2[] = $roww;
                 }
-                $this->view("usuario", array(
+                $this->view("cliente", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
                     "result" => $resultSet2,

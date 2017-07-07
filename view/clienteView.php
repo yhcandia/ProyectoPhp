@@ -203,34 +203,34 @@ function Rut(texto)
 
                              <?php if (isset($_SESSION['buscarpor'])) { ?>
                                  <option value="<?php echo $_SESSION['buscarpor'] ?>" selected="<?php echo $_SESSION['buscarpor'] ?>">
-                                     <?php if ($_SESSION['buscarpor'] == "nombreusuario") { ?>
+                                     <?php if ($_SESSION['buscarpor'] == "nombre_completo") { ?>
                                      Buscar por Nombre </option> 
-                                     <option value="nombre">Buscar por Tipo Persona</option>
+                                     <option value="tipo_persona">Buscar por Tipo Persona</option>
                                      <option value="rut">Buscar por RUT</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
-                                 <?php } if ($_SESSION['buscarpor'] == "tipoPersona") { ?>
+                                     <option value="id">Buscar por ID de cliente</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "tipo_persona") { ?>
                                      Buscar por Tipo Persona </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
+                                     <option value="nombre_completo">Buscar por Nombre</option>
                                      <option value="rut">Buscar por RUT</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
+                                     <option value="id">Buscar por ID de cliente</option>
                                  <?php } if ($_SESSION['buscarpor'] == "rut") { ?>
                                      Buscar por RUT </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
-                                     <option value="nombre">Buscar por Tipo Persona</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
-                                 <?php } if ($_SESSION['buscarpor'] == "idusuario") { ?>
-                                     Buscar por ID de usuario </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
-                                     <option value="nombre">Buscar por Tipo Persona</option>
+                                     <option value="nombre_completo">Buscar por Nombre</option>
+                                     <option value="tipo_persona">Buscar por Tipo Persona</option>
+                                     <option value="id">Buscar por ID de cliente</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "id") { ?>
+                                     Buscar por ID de cliente </option> 
+                                     <option value="nombre_completo">Buscar por Nombre</option>
+                                     <option value="tipo_persona">Buscar por Tipo Persona</option>
                                      <option value="rut">Buscar por RUT</option>
                                  <?php } ?>
 
 
                              <?php } else { ?>
-                                 <option value="nombreusuario">Buscar por Nombre</option>
-                                 <option value="nombre">Buscar por Tipo Persona</option>
+                                 <option value="nombre_completo">Buscar por Nombre</option>
+                                 <option value="tipo_persona">Buscar por Tipo Persona</option>
                                  <option value="rut">Buscar por RUT</option>
-                                 <option value="idusuario">Buscar por ID de usuario</option>
+                                 <option value="id">Buscar por ID de cliente</option>
                              <?php } ?>
                              </select>
                          <div class="form-group" >
@@ -253,7 +253,7 @@ function Rut(texto)
 
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title">Agregar</h4>
+                                        <h4 class="modal-title">Agregar</h4> <h5><font color="red">Todos los campos son obligatorios</font></h5>
                                     </div>
                                     <div class="modal-body">
                                         <form role="form" name="form1" method="post" action="<?php echo $helper->url("clientes", "crear");?>" onSubmit="javascript:return Rut(document.form1.rutUsuario.value)">
@@ -289,7 +289,7 @@ function Rut(texto)
                             <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
                             <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>        
                             <div class="panel panel-default">
-                                <div class="panel-body ">Datos Usuario</div>
+                                <div class="panel-body ">Datos Clientes</div>
                                 <div class="panel-footer">   
                                     <table class="table">
 
@@ -303,7 +303,9 @@ function Rut(texto)
                                         <th>Dirección</th>
                                         <th>Telefono</th>
                                         <th>Editar</th>
+                                        <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
                                         <th>Eliminar</th>
+                                        <?php } ?>
                                         <th></th>
                                         </thead>
                                         <tbody>                          
@@ -328,18 +330,20 @@ function Rut(texto)
 
                                                                     <div class="modal-header">
                                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                        <h4 class="modal-title">Editar</h4>
+                                                                        <h4 class="modal-title">Editar</h4> 
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form role="form" name="form2" action="<?php echo $helper->url("clientes", "update"); ?>" method="post">                                                                           
+                                                                        <form role="form" name="form2" action="<?php echo $helper->url("clientes", "update"); ?>" method="post">  
+                                                                             <div class="form-group"><label>ID:</label> <input required="" type="text" name="id" value="<?php echo $row->id; ?>" readonly=""   class="form-control" /></div>
                                                                             <div class="form-group"><label>Rut:</label> <input required="" type="text" name="rutClientee" value="<?php echo $row->rut; ?>"   readonly=""  class="form-control" /></div>
                                                                             <div class="form-group"><label>Nombre Completo:</label> <input required="" type="text" name="nombreClientee" value="<?php echo $row->nombre_completo; ?>" class="form-control"/></div>
+                                                                             <div class="form-group"><label>Dirección:</label> <input required="" type="text" name="direccionClientee" value="<?php echo $row->direccion; ?>" class="form-control"/></div>
                                                                             <div class="form-group"><label>Telefono: </label><input type="number" min="200000000" max="999999999" value="<?php echo $row->telefonos; ?>" class="form-control" name="telefonoClientee" required=""/></div>
                                                                             <div class="form-group"><label >Fecha de incorporación:</label><p><input min="2016-01-01" value="<?php echo $row->fecha_incorporacion; ?>" max="2018-12-31" value="<?php echo date('Y-m-d');?>" type="date" class="form-control" name="fechaClientee"/></p> </div>
                                                                             <div class="form-group"><label>Seleccione Tipo de Persona: </label>                                          
                                                                             <select class="form-control"  name="TipoPersonae" required="" >
                                                                             <option value="">-- Seleccione --</option>
-                                                                                <?php if ($roww->tipo_persona == "Natural") {
+                                                                                <?php if ($row->tipo_persona == 'Natural') {
                                                                                             ?>
                                                                                 <option value="Natural" selected>Natural</option>
                                                                                 <option value="Juridica">Juridica</option>
@@ -356,8 +360,8 @@ function Rut(texto)
                                                             </div><!-- /.modal-dialog -->
                                                         </div><!-- /.modal --> 
                                                     </td>  
-                                                    <?php if($row->idusuario!="1"){ ?>
-                                                    <td><a href="#" title="Desactivar" onClick="confirmarRemover(<?php echo $row->id; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
+                                                    <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
+                                                    <td><a href="#" title="Eliminar" onClick="confirmarRemover(<?php echo $row->id; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
                                                     <?php } else {?>
                                                     <td></td>
                                                     <?php }?>
