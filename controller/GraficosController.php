@@ -29,6 +29,7 @@ class GraficosController extends ControladorBase {
         $num_reg4= null;
         $num_reg5= null;
         $resultGrafico6= null;
+        $resultGrafico7= null;
         
         //grafico 1
         $queryTotalClienteJuridico="SELECT * FROM cliente where tipo_persona='Juridica'";
