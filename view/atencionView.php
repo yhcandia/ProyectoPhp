@@ -205,7 +205,22 @@ function Rut(texto)
         unset($_SESSION['debemodificar']);
          }
         ?>
-             <form action="<?php echo $helper->url("usuarios", "buscarNombreUsuario"); ?>" method="post">
+        <?php if(isset($_SESSION['debeconfirmar']) ) { 
+            $texto="";
+             foreach( $_SESSION['debeconfirmar'] as $list) {
+                 if($texto!=""){
+                   $texto=$texto." ; ";  
+                 }
+                 $texto=$texto.$list;
+             }
+             $alerta="Debe modificar el estado de las atenciones con id :  ".$texto." , para verificar si fueron realizadas.";
+        ?>
+        <script>alert("<?php echo $alerta;?>");</script>
+        <?php  
+        unset($_SESSION['debeconfirmar']);
+         }
+        ?>
+             <form action="<?php echo $helper->url("atenciones", "buscarNombre"); ?>" method="post">
                  <div class="form-group" style="width: 100%;text-align: center">
                      <center>
                             <label>Buscar:</label>
@@ -218,34 +233,26 @@ function Rut(texto)
 
                              <?php if (isset($_SESSION['buscarpor'])) { ?>
                                  <option value="<?php echo $_SESSION['buscarpor'] ?>" selected="<?php echo $_SESSION['buscarpor'] ?>">
-                                     <?php if ($_SESSION['buscarpor'] == "nombreusuario") { ?>
-                                     Buscar por Nombre </option> 
-                                     <option value="nombre">Buscar por Perfil</option>
-                                     <option value="rut">Buscar por RUT</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
-                                 <?php } if ($_SESSION['buscarpor'] == "nombre") { ?>
-                                     Buscar por Perfil </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
-                                     <option value="rut">Buscar por RUT</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
-                                 <?php } if ($_SESSION['buscarpor'] == "rut") { ?>
-                                     Buscar por RUT </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
-                                     <option value="nombre">Buscar por Perfil</option>
-                                     <option value="idusuario">Buscar por ID de usuario</option>
-                                 <?php } if ($_SESSION['buscarpor'] == "idusuario") { ?>
-                                     Buscar por ID de usuario </option> 
-                                     <option value="nombreusuario">Buscar por Nombre</option>
-                                     <option value="nombre">Buscar por Perfil</option>
-                                     <option value="rut">Buscar por RUT</option>
-                                 <?php } ?>
+                                     <?php if ($_SESSION['buscarpor'] == "id_atencion") { ?>
+                                     Buscar por ID de atención </option> 
+                                       <option value="abogado.rut">Buscar por RUT abogado</option>
+                                       <option value="cliente.rut">Buscar por RUT cliente</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "abogado.rut") { ?>
+                                     Buscar por RUT abogado </option> 
+                                        <option value="id_atencion">Buscar por ID de atención</option>
+                                        <option value="cliente.rut">Buscar por RUT cliente</option>
+                                 <?php } if ($_SESSION['buscarpor'] == "cliente.rut") { ?>
+                                     Buscar por RUT cliente</option> 
+                                        <option value="id_atencion">Buscar por ID de atención</option>
+                                        <option value="abogado.rut">Buscar por RUT abogado</option>
+                                        
+                                 <?php }?>
 
 
                              <?php } else { ?>
-                                 <option value="nombreusuario">Buscar por Nombre</option>
-                                 <option value="nombre">Buscar por Perfil</option>
-                                 <option value="rut">Buscar por RUT</option>
-                                 <option value="idusuario">Buscar por ID de usuario</option>
+                                 <option value="id_atencion">Buscar por ID de atención</option>
+                                 <option value="abogado.rut">Buscar por RUT abogado</option>
+                                 <option value="cliente.rut">Buscar por RUT cliente</option>
                              <?php } ?>
                              </select>
                          <div class="form-group" >
