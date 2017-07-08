@@ -18,6 +18,18 @@ class GraficosController extends ControladorBase {
 
     public function index() { 
 
+        $num_registros1 = null;
+        $num_registros2= null;
+        $resultGrafico2= null;
+        $resultGrafico3= null;
+        $resultGrafico4= null;
+        $num_reg1= null;
+        $num_reg2= null;
+        $num_reg3= null;
+        $num_reg4= null;
+        $num_reg5= null;
+        $resultGrafico6= null;
+        
         //grafico 1
         $queryTotalClienteJuridico="SELECT * FROM cliente where tipo_persona='Juridica'";
         $res1 = $this->adapter->query($queryTotalClienteJuridico);
@@ -25,6 +37,7 @@ class GraficosController extends ControladorBase {
         $queryTotalClienteNatural="SELECT * FROM cliente where tipo_persona='Natural'";
         $res2 = $this->adapter->query($queryTotalClienteNatural);
         $num_registros2 = mysqli_num_rows($res2);
+        
         //grafico 2
         $queryAtencionesClientes="SELECT atencion.cliente_id as id_cliente, cliente.nombre_completo as nombre, COUNT(atencion.cliente_id) as cantidad FROM cliente INNER JOIN atencion ON cliente.id = atencion.cliente_id GROUP BY atencion.cliente_id;";
         $res3 = $this->adapter->query($queryAtencionesClientes);
@@ -68,7 +81,12 @@ class GraficosController extends ControladorBase {
         while ($row = $res6->fetch_object()) {
             $resultGrafico6[] = $row;
         }
-        
+        //grafico 7
+        $queryMesAtencion="SELECT MONTH(atencion.fecha_atencion) as mes,count(*) as cantidad from atencion GROUP BY MONTH(atencion.fecha_atencion);";
+        $res7 = $this->adapter->query($queryMesAtencion);
+        while ($row = $res7->fetch_object()) {
+            $resultGrafico7[] = $row;
+        }
         
         $this->view("grafico", array(
                 "numJuridica" => $num_registros1,
@@ -82,7 +100,8 @@ class GraficosController extends ControladorBase {
                 "numPerdida" => $num_reg4,
                 "numAnulada" => $num_reg5,
                 "grafico6" => $resultGrafico6,
-        ));       
+                "grafico7" => $resultGrafico7
+        ));      
     }
 
  

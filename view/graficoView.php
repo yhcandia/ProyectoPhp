@@ -14,7 +14,7 @@
             .container2 .panel {
                 position: absolute;
                 top: 20%;
-                margin-left: 10%;
+            
                 width: 100%;
             }
             .principal{
@@ -23,16 +23,21 @@
             footer {
                 padding-top:10px;
                 width:100%;
-                top: 150%;
+                top: 200%;
                 height:60px;
                 position:absolute;
                 bottom:0;
                 background-color: white;
                 border-top: solid 5px #404040;
             }
+            div{
+                margin:0px;
+                padding: 0px;
+            }
         </style>
         <script type="text/javascript">
         window.onload = function () {
+            <?php if($numJuridica != null || $numNatural != null ) {?>
             var chart = new CanvasJS.Chart("chartContainer",
             {
                     title:{
@@ -67,6 +72,9 @@
                     }
                     ]
             });
+            chart.render();
+            <?php } ?>
+            <?php if($grafico2 != null) {?>
             var chart2 = new CanvasJS.Chart("chartContainer2",
             {
                 title:{
@@ -101,6 +109,9 @@
                     }   
                 ]
             });
+            chart2.render();
+            <?php } ?>
+            <?php if($grafico3 != null) {?>
             var chart3 = new CanvasJS.Chart("chartContainer3",
             {
                 title:{
@@ -140,6 +151,9 @@
                     }   
                 ]
             });
+            chart3.render();
+            <?php } ?>
+            <?php if($grafico4 != null) {?>
             var chart4 = new CanvasJS.Chart("chartContainer4",
             {
                 title:{
@@ -174,7 +188,9 @@
                     }   
                 ]
             });
-            
+            chart4.render();
+            <?php } ?>
+            <?php if($numRealizada != null || $numAgendada  != null || $numConfirmada  != null || $numPerdida  != null || $numAnulada  != null) {?>
             var chart5 = new CanvasJS.Chart("chartContainer5",
             {
                     title:{
@@ -212,6 +228,9 @@
                     }
                     ]
             });
+            chart5.render();
+            <?php } ?>
+            <?php if($grafico6 != null) {?>
             var chart6 = new CanvasJS.Chart("chartContainer6",
             {
                 title:{
@@ -246,13 +265,40 @@
                     }   
                 ]
             });
-            
-            chart.render();
-            chart2.render();
-            chart3.render();
-            chart4.render();
-            chart5.render();
             chart6.render();
+            <?php } ?>
+            <?php if($grafico7 != null) {?>
+            var chart7 = new CanvasJS.Chart("chartContainer7",
+            {
+            zoomEnabled: true,      
+
+            title:{
+                text: "Atenciones por Mes", 
+                fontSize: 20,
+                fontFamily: "arial black"
+            },
+            axisY: {
+                title: "Atenciones"               
+            }, 
+            axisX:{
+                interval: 1,
+                intervalType: "month",
+                title: "Meses",
+                valueFormatString: "MMM"
+            },
+            data:   [
+                    {        
+                      type: "line",
+                      dataPoints: [                  
+                              <?php foreach($grafico7 as $row) { ?>
+                                {x: new Date(2018,<?php echo $row->mes-1; ?>, 1) , y: <?php echo $row->cantidad; ?>},
+                              <?php } ?>  
+                                ]
+                    }
+                ]
+            });
+            chart7.render();
+            <?php } ?>
     }
     </script>
     </head>
@@ -261,20 +307,18 @@
         <div class="container2">  
             <div style="width: 100%;height:60px;text-align: center;background-color: #B0B0B0;padding-top: 2px;position: relative"><font color="white" ><b><h3>ESTADISTICAS DE CLIENTES</h3></b></div>
             <div style="width: 100%;height:420px;text-align: center;padding-top: 2px;position: relative">
-            <div id="chartContainer" style="width: 31%;position: relative;margin-top: 8px;"></div>
-            <div id="chartContainer2" style="width: 31%;position: relative;left: 34%;"></div>
-            <div id="chartContainer3" style="width: 31%;position: relative;left: 68%;"></div>
+            <div id="chartContainer" style="width: 31%;position: absolute;left: 1%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
+            <div id="chartContainer2" style="width: 31%;position: absolute;left: 34.5%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
+            <div id="chartContainer3" style="width: 31%;position: absolute;left: 68%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
             </div>
             <div style="width: 100%;height:60px;text-align: center;background-color: #B0B0B0;padding-top: 2px;position: relative"><font color="white" ><b><h3>ESTADISTICAS DE ATENCIONES</h3></b></div>
             <div style="width: 100%;height:420px;text-align: center;padding-top: 2px;position: relative">
-            <div id="chartContainer4" style="width: 31%;position: relative;margin-top: 8px;"></div>
-            <div id="chartContainer5" style="width: 31%;position: relative;left: 34%;"></div>
-            <div id="chartContainer6" style="width: 31%;position: relative;left: 68%;"></div>
+                <div id="chartContainer4" style="width: 31%;position: absolute;left: 15%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
+                <div id="chartContainer5" style="width: 31%;position: absolute;left: 55%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>      
             </div>
             <div style="width: 100%;height:420px;text-align: center;padding-top: 2px;position: relative">
-            <div id="chartContainer7" style="width: 31%;position: relative;margin-top: 8px;"></div>
-            <div id="chartContainer8" style="width: 31%;position: relative;left: 48%;"></div>
- 
+                <div id="chartContainer7" style="width: 31%;position: absolute;left: 15%;margin-top:5px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
+                <div id="chartContainer6" style="width: 31%;position: absolute;left: 55%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
             </div>
                     <footer><center><img src="view/img/balanza.png" width="150px" height="100px" alt=""/><center></footer>
         </div>
