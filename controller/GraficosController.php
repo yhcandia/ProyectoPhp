@@ -62,6 +62,14 @@ class GraficosController extends ControladorBase {
         $resp5 = $this->adapter->query($queryEstado5);
         $num_reg5 = mysqli_num_rows($resp5);
         
+        //grafico 6
+        $queryEspecialidadAtencion=" SELECT atencion.abogado_id as id_abogado, abogado.especialidad as especialidad, COUNT(atencion.abogado_id) as cantidad FROM abogado INNER JOIN atencion ON abogado.id = atencion.abogado_id GROUP BY abogado.especialidad;";
+        $res6 = $this->adapter->query($queryEspecialidadAtencion);
+        while ($row = $res6->fetch_object()) {
+            $resultGrafico6[] = $row;
+        }
+        
+        
         $this->view("grafico", array(
                 "numJuridica" => $num_registros1,
                 "numNatural" => $num_registros2,
@@ -72,7 +80,8 @@ class GraficosController extends ControladorBase {
                 "numAgendada" => $num_reg2,
                 "numConfirmada" => $num_reg3,
                 "numPerdida" => $num_reg4,
-                "numAnulada" => $num_reg5           
+                "numAnulada" => $num_reg5,
+                "grafico6" => $resultGrafico6,
         ));       
     }
 

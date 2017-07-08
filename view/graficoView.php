@@ -212,13 +212,47 @@
                     }
                     ]
             });
-            
+            var chart6 = new CanvasJS.Chart("chartContainer6",
+            {
+                title:{
+                  text: "Atenciones",
+                  fontSize: 20,
+                  fontFamily: "arial black"
+                },
+                axisY: {			
+			title: "Atenciones"		
+		}, 
+		axisX: {
+			title: "Especialidades"
+		},
+                exportEnabled: true,
+                animationEnabled: true,              
+                legend: {
+                  verticalAlign: "bottom",
+                  horizontalAlign: "center"
+                },
+                theme: "theme2",        
+                data: [
+
+                    {        
+                      type: "column",        
+                      toolTipContent: "{label}: {y} atenciones",
+                      legendMarkerColor: "grey",
+                      dataPoints: [  
+                      <?php foreach($grafico6 as $row) { ?>
+                        {y: <?php echo $row->cantidad; ?> , label: '<?php echo $row->especialidad; ?>'},
+                      <?php } ?>       
+                      ]
+                    }   
+                ]
+            });
             
             chart.render();
             chart2.render();
             chart3.render();
             chart4.render();
-            chart5.render(); 
+            chart5.render();
+            chart6.render();
     }
     </script>
     </head>
