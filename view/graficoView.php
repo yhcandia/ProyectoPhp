@@ -25,7 +25,7 @@
                 width:100%;
                 top: 200%;
                 height:60px;
-                position:absolute;
+                position:relative;
                 bottom:0;
                 background-color: white;
                 border-top: solid 5px #404040;
@@ -320,7 +320,8 @@
                 <div id="chartContainer7" style="width: 31%;position: absolute;left: 15%;margin-top:5px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
                 <div id="chartContainer6" style="width: 31%;position: absolute;left: 55%;margin-top:3px;"><img src="view/img/alerta.png" width="50%" height="50%" alt=""/><br><b>Datos insuficientes</b></div>
             </div>
-                    <footer><center><img src="view/img/balanza.png" width="150px" height="100px" alt=""/><center></footer>
+                
         </div>
+            <footer><center><img src="view/img/balanza.png" width="150px" height="100px" alt=""/><center></footer>
     </body>
 </html>
