@@ -257,10 +257,17 @@ function Rut(texto)
                                     </div>
                                     <div class="modal-body">
                                         <form role="form" name="form1" method="post" action="<?php echo $helper->url("abogados", "crear");?>" onSubmit="javascript:return Rut(document.form1.rutUsuario.value)">
-
+                                                       
                                             <div class="form-group"><label>RUT: </label> <input type="text" maxlength="12" value="" name="rutUsuario" class="form-control" required=""/></div>
-                                            <div class="form-group"><label>Nombre Completo: </label><input type="text" class="form-control" name="nombreAbogado" required=""/></div>
-                                            <div class="form-group"><label>Especialidad: </label><input type="text" class="form-control" name="especialidadAbogado" required=""/></div>
+                                            <div class="form-group"><label>Nombre Completo: </label><input type="text" class="form-control" name="nombreAbogado" required=""/></div>                                          
+                                            <div class="form-group"><label>Especialidad: </label>
+                                                <select name="especialidadAbogado" class="form-control" required=""/>                                           
+                                                <option value="">-- Seleccione --</option>
+                                                <option value="Accidentes de Trabajo">Accidentes de Trabajo</option>
+                                                <option value="Accidentes Viales">Accidentes Viales</option>
+                                                <option value="Comercio Internacional">Comercio Internacional</option>
+                                                <option value="Derecho Civil">Derecho Civil</option>                              
+                                            </select></div>
                                             <div class="form-group"><label>Valor Hora: $</label><input type="number" min="1" class="form-control" name="valorAbogado" required=""/></div>
                                             <div class="form-group"><label >Fecha de contratación:</label><p><input min="2016-01-01" max="2018-12-31" value="<?php echo date('Y-m-d');?>" type="date" class="form-control" name="fechaAbogado"/></p> </div>                                           
                                             <button type="submit" class="btn btn-default">Agregar</button>
@@ -324,12 +331,44 @@ function Rut(texto)
                                                                         <h4 class="modal-title">Editar</h4> 
                                                                     </div>
                                                                     <div class="modal-body">
-                                                                        <form role="form" name="form2" action="<?php echo $helper->url("clientes", "update"); ?>" method="post">  
+                                                                        <form role="form" name="form2" action="<?php echo $helper->url("abogados", "update"); ?>" method="post">  
                                                                              <div class="form-group"><label>ID:</label> <input required="" type="text" name="id" value="<?php echo $row->id; ?>" readonly=""   class="form-control" /></div>
                                                                             <div class="form-group"><label>Rut:</label> <input required="" type="text" name="rutAbogadoe" value="<?php echo $row->rut; ?>"   readonly=""  class="form-control" /></div>
                                                                             <div class="form-group"><label>Nombre Completo:</label> <input required="" type="text" name="nombreAbogadoe" value="<?php echo $row->nombre_completo; ?>" class="form-control"/></div>
                                                                              <div class="form-group"><label>Especialidad:</label> <input required="" type="text" name="especialidadAbogadoe" value="<?php echo $row->especialidad; ?>" class="form-control"/></div>
-                                                                            <div class="form-group"><label>Valor Hora: </label><input type="number" min="200000000" max="999999999" value="<?php echo $row->valor_hora; ?>" class="form-control" name="valorAbogadoe" required=""/></div>
+                                                                            <div class="form-group"><label>Especialidad: </label>
+                                                                                
+                                                                            <select name="especialidadAbogadoe" class="form-control" required=""/>  
+                                                                                <?php if($row->especialidad == 'Accidentes de Trabajo'){?>
+                                                                                    <option value="">-- Seleccione --</option>
+                                                                                    <option value="Accidentes de Trabajo" selected>Accidentes de Trabajo</option>
+                                                                                    <option value="Accidentes Viales">Accidentes Viales</option>
+                                                                                    <option value="Comercio Internacional">Comercio Internacional</option>
+                                                                                    <option value="Derecho Civil">Derecho Civil</option>
+                                                                                <?php } ?>
+                                                                                <?php if($row->especialidad == 'Accidentes Viales'){?>
+                                                                                    <option value="">-- Seleccione --</option>
+                                                                                    <option value="Accidentes de Trabajo">Accidentes de Trabajo</option>
+                                                                                    <option value="Accidentes Viales" selected>Accidentes Viales</option>
+                                                                                    <option value="Comercio Internacional">Comercio Internacional</option>
+                                                                                    <option value="Derecho Civil">Derecho Civil</option>
+                                                                                <?php } ?>
+                                                                                <?php if($row->especialidad == 'Comercio Internacional'){?>
+                                                                                    <option value="">-- Seleccione --</option>
+                                                                                    <option value="Accidentes de Trabajo">Accidentes de Trabajo</option>
+                                                                                    <option value="Accidentes Viales">Accidentes Viales</option>
+                                                                                    <option value="Comercio Internacional" selected>Comercio Internacional</option>
+                                                                                    <option value="Derecho Civil">Derecho Civil</option>
+                                                                                <?php } ?>
+                                                                                <?php if($row->especialidad == 'Derecho Civil'){?>
+                                                                                    <option value="">-- Seleccione --</option>
+                                                                                    <option value="Accidentes de Trabajo">Accidentes de Trabajo</option>
+                                                                                    <option value="Accidentes Viales">Accidentes Viales</option>
+                                                                                    <option value="Comercio Internacional">Comercio Internacional</option>
+                                                                                    <option value="Derecho Civil" selected>Derecho Civil</option>
+                                                                                <?php } ?>                                                                                     
+                                                                            </select></div>
+                                                                            <div class="form-group"><label>Valor Hora: </label><input type="number" min="1" value="<?php echo $row->valor_hora; ?>" class="form-control" name="valorAbogadoe" required=""/></div>
                                                                             <div class="form-group"><label >Fecha de Contratación:</label><p><input min="2016-01-01" value="<?php echo $row->fecha_contratacion; ?>" max="2018-12-31" value="<?php echo date('Y-m-d');?>" type="date" class="form-control" name="fechaAbogadoe"/></p> </div>
                                                                             
                                                                             <button type="submit" class="btn btn-default">Editar</button>
