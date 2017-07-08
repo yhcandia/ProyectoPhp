@@ -100,6 +100,23 @@ class Usuario extends EntidadBase{
             return false;
         }
     }
+    function VerificaUsuarioClaveWTipo($tipo){
+        $sql="SELECT * FROM usuario WHERE rut='$this->rut' and clave='$this->clave' and perfil_idperfil='$tipo'";
+              
+        $resultado=  $this->db()->query($sql);
+               
+        if ($resultado->num_rows>=1){
+            $row = $resultado->fetch_row();
+            $this->id = $row[0];
+            $this->rut = $row[1];
+            $this->nombre=$row[2];
+            $this->clave= $row[3];
+            $this->idperfil = $row[4];
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 
 }

@@ -243,7 +243,9 @@ function Rut(texto)
 
         
         <div class="principal">
-            <div class="container2" style="padding-bottom:100px;">           
+            <div class="container2" style="padding-bottom:100px;">  
+                 <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
+                                                   
                 <div class="row">
                     <div class="col-md-16">
                         <div class="modal fade" id="ModalAgregar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -282,7 +284,7 @@ function Rut(texto)
 
                     </div>
                 </div>
-           
+                 <?php } ?>
                         <?php
                         if ($num_registros > 0) {
                             ?>
@@ -302,7 +304,9 @@ function Rut(texto)
                                         <th>Tipo Persona</th>
                                         <th>Dirección</th>
                                         <th>Telefono</th>
+                                        <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
                                         <th>Editar</th>
+                                        <?php } ?>
                                         <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
                                         <th>Eliminar</th>
                                         <?php } ?>
@@ -321,6 +325,7 @@ function Rut(texto)
                                                     <td><?php echo $row->tipo_persona; ?></td>
                                                     <td><?php echo $row->direccion; ?></td>
                                                     <td><?php echo $row->telefonos; ?></td>
+                                                    <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
                                                     <td>
                                                        <a data-toggle="modal" href="#ModalEditar<?php echo $row->id ?>" title="Editar" class="btn btn-info glyphicon glyphicon-edit"></a>
                                                         <div class="modal fade" id="ModalEditar<?php echo $row->id ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -359,7 +364,10 @@ function Rut(texto)
                                                                 </div><!-- /.modal-content -->
                                                             </div><!-- /.modal-dialog -->
                                                         </div><!-- /.modal --> 
-                                                    </td>  
+                                                    </td>
+                                                    <?php } else {?>
+                                                    <td></td>
+                                                    <?php }?>
                                                     <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
                                                     <td><a href="#" title="Eliminar" onClick="confirmarRemover(<?php echo $row->id; ?>)" class="btn btn-danger glyphicon glyphicon-ban-circle"></a> </td>
                                                     <?php } else {?>
@@ -381,7 +389,10 @@ function Rut(texto)
                                 <br>
                                 <br>
                                 <div class="pull-left" style="bottom:20px;position: absolute;left: 10px;">
-                                    <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                      <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
+                 
+                                        <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                      <?php } ?>
                                 </div>
                             </div>
                             <?php
@@ -390,7 +401,9 @@ function Rut(texto)
                             <div class="panel panel-default col-md-8 center-block">
                                 <div class="panel-body" style="text-align: center">                
                                     <h4>Aviso!!!</h4> No hay datos para mostrar<br>
-                                    <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '3' ){ ?>
+                                       <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php } ?>
                                 </div>
                             </div>
                             <?php

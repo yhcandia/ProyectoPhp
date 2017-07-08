@@ -236,23 +236,30 @@ function Rut(texto)
                                      <?php if ($_SESSION['buscarpor'] == "id_atencion") { ?>
                                      Buscar por ID de atención </option> 
                                        <option value="abogado.rut">Buscar por RUT abogado</option>
-                                       <option value="cliente.rut">Buscar por RUT cliente</option>
+                                      <?php if ($_SESSION['session']['idRol'] != '5' ){ ?>
+                                        <option value="cliente.rut">Buscar por RUT cliente</option>
+                                      <?php } ?>  
                                  <?php } if ($_SESSION['buscarpor'] == "abogado.rut") { ?>
                                      Buscar por RUT abogado </option> 
                                         <option value="id_atencion">Buscar por ID de atención</option>
+                                        <?php if ($_SESSION['session']['idRol'] != '5' ){ ?>
                                         <option value="cliente.rut">Buscar por RUT cliente</option>
+                                        <?php } ?> 
+                                 <?php if ($_SESSION['session']['idRol'] != '5' ){ ?>        
                                  <?php } if ($_SESSION['buscarpor'] == "cliente.rut") { ?>
                                      Buscar por RUT cliente</option> 
                                         <option value="id_atencion">Buscar por ID de atención</option>
                                         <option value="abogado.rut">Buscar por RUT abogado</option>
                                         
                                  <?php }?>
-
+                                 <?php } ?> 
 
                              <?php } else { ?>
                                  <option value="id_atencion">Buscar por ID de atención</option>
                                  <option value="abogado.rut">Buscar por RUT abogado</option>
-                                 <option value="cliente.rut">Buscar por RUT cliente</option>
+                                 <?php if ($_SESSION['session']['idRol'] != '5' ){ ?>
+                                    <option value="cliente.rut">Buscar por RUT cliente</option>
+                                 <?php } ?> 
                              <?php } ?>
                              </select>
                          <div class="form-group" >
@@ -261,7 +268,7 @@ function Rut(texto)
                      </center>
                  </div>                                
                        
-                    </form>
+                </form>
 
         
         <div class="principal">
@@ -347,8 +354,10 @@ function Rut(texto)
                                         <th>Nombre Abogado</th>
                                         <th>Rut Abogado</th>
                                         <th>estado</th>
+                                        <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '4' ){ ?>
                                         <th>Editar</th>
                                         <th>Anular</th>
+                                        <?php } ?>
                                         <th></th>
                                         </thead>
                                         <tbody>                          
@@ -365,6 +374,8 @@ function Rut(texto)
                                                     <td><?php echo $row->nombre_abogado; ?></td>
                                                     <td><?php echo $row->rut_abogado; ?></td>
                                                     <td><?php echo $row->estado; ?></td>
+                                                    <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '4' ){ ?>
+                                       
                                                     <?php if($row->estado!="REALIZADA"){ ?>
                                                     <td>
                                                         <a data-toggle="modal" href="#ModalEditar<?php echo $row->id_atencion ?>" title="Editar" class="btn btn-info glyphicon glyphicon-edit"></a>
@@ -380,15 +391,56 @@ function Rut(texto)
                                                                     <div class="modal-body">
                                                                         <form role="form" name="form2" action="<?php echo $helper->url("atenciones", "update"); ?>" method="post">
                                                                             <div class="form-group"><label>ID:</label> <input required="" type="text" name="id" value="<?php echo $row->id_atencion; ?>" readonly=""   class="form-control" /></div>
-                                                                                       <div class="form-group"><label>Estado de la atención: </label>
-                                                                                        <select name="estado" class="form-control" required=""/>                                           
-                                                                                        <option value="">-- Seleccione --</option>
-                                                                                        <option value="REALIZADA">REALIZADA</option>
-                                                                                        <option value="AGENDADA">AGENDADA</option>
-                                                                                        <option value="CONFIRMADA">CONFIRMADA</option>
-                                                                                        <option value="PERDIDA">PERDIDA</option>
-                                                                                 
-                                                                                        </select></div>
+                                                                                                <div class="form-group"><label>fecha: </label> <input type="date" value="<?php $date = date_create($row->fecha_atencion);echo date_format($date,'Y-m-d'); ?>" min="<?php echo date('Y-m-d') ?>"maxlength="12" value="" name="fecha" class="form-control" required=""/></div>
+                                                                                                <div class="form-group"><label>Hora: </label><input type="time" value="<?php $date = date_create($row->fecha_atencion);echo date_format($date,'H:i:s'); ?>" min="08:00:00" max="17:00:00" class="form-control" name="time" required=""/></div>
+                                                                                                <div class="form-group"><label>Rut Abogado: </label>
+                                                                                                    <select name="idabogado" class="form-control" required=""/>                                           
+                                                                                                    <option value="">-- Seleccione --</option>
+                                                                                                    <?php
+
+                                                                                                    foreach ($abogados as $rowww) {
+                                                                                                        if($rowww->rut==$row->rut_abogado){
+                                                                                                        ?>
+                                                                                                                                                    
+                                                                                                    <option selected="" value="<?php echo $rowww->id; ?>"><?php echo $rowww->rut; ?></option>
+                                                                                                        <?php } else{ ?>   
+                                                                                                         <option value="<?php echo $rowww->id; ?>"><?php echo $rowww->rut; ?></option>
+                                                                                                        
+                                                                                                    <?php
+                                                                                                        }
+                                                                                                    }
+                                                                                                    ?>
+                                                                                                    </select></div>                                   
+                                                                                                <div class="form-group"><label>Rut Cliente: </label>
+                                                                                                    <select name="idcliente" class="form-control" required=""/>                                           
+                                                                                                    <option value="">-- Seleccione --</option>
+                                                                                                    <?php
+
+                                                                                                    foreach ($clientes as $rowwww) {
+
+                                                                                                         if($rowwww->rut==$row->rut_cliente){
+                                                                                                        ?>
+                                                                                                                                                    
+                                                                                                        <option selected="" value="<?php echo $rowwww->id; ?>"><?php echo $rowwww->rut; ?></option>
+                                                                                                        <?php } else{ ?>  
+
+                                                                                                         <option value="<?php echo $rowwww->id; ?>"><?php echo $rowwww->rut; ?></option>
+                                                                                                            <?php
+                                                                                                        }
+
+                                                                                                    }
+                                                                                                    ?>
+                                                                                                    </select></div>                                   
+                                            
+                                                                                                    <div class="form-group"><label>Estado de la atención: </label>
+                                                                                                    <select name="estado" class="form-control" required=""/>                                           
+                                                                                                    <option value="">-- Seleccione --</option>
+                                                                                                    <option value="REALIZADA">REALIZADA</option>
+                                                                                                    <option value="AGENDADA">AGENDADA</option>
+                                                                                                    <option value="CONFIRMADA">CONFIRMADA</option>
+                                                                                                    <option value="PERDIDA">PERDIDA</option>
+
+                                                                                                    </select></div>
                                                                             <button type="submit" class="btn btn-default">Editar</button>
                                                                         </form>
                                                                     </div>
@@ -405,6 +457,7 @@ function Rut(texto)
                                                     <td></td>
                                                     <?php }?>
                                                     <td></td>
+                                                    <?php }?>
                                                 </tr>                                 
                                                 <?php
                                             }
@@ -420,7 +473,9 @@ function Rut(texto)
                                 <br>
                                 <br>
                                 <div class="pull-left" style="bottom:20px;position: absolute;left: 10px;">
-                                    <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '4' ){ ?>
+                                      <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php } ?>
                                 </div>
                             </div>
                             <?php
@@ -429,7 +484,9 @@ function Rut(texto)
                             <div class="panel panel-default col-md-8 center-block">
                                 <div class="panel-body" style="text-align: center">                
                                     <h4>Aviso!!!</h4> No hay datos para mostrar<br>
-                                    <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php if ($_SESSION['session']['idRol'] == '1' || $_SESSION['session']['idRol'] == '4' ){ ?>
+                                     <a data-toggle="modal" href="#ModalAgregar" title="Agregar" class="btn btn-success glyphicon glyphicon-plus"></a>
+                                     <?php } ?>
                                 </div>
                             </div>
                             <?php

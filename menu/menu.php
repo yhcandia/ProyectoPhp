@@ -20,36 +20,47 @@
                 <ul>
                     <?php
                     if (isset($_SESSION['session'])) {
-
-                        if ($_SESSION['session']['idRol'] == '1') {
+                     ?>   
+                        <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
+                    <?php         
+                        if ($_SESSION['session']['idRol'] == '1') { //SUPERADMIN
                             ?>    
-                            <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
                             <li><a href="./index.php?controller=usuarios&action=index"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
                             <li><a href="./index.php?controller=clientes&action=index"><span class="glyphicon glyphicon-user"></span>Clientes</a></li>
                             <li><a href="./index.php?controller=abogados&action=index"><span class="glyphicon glyphicon-user"></span>Abogados</a></li>
                             <li><a href="./index.php?controller=graficos&action=index"><span class="glyphicon glyphicon-user"></span>Graficos</a></li>
-                            <li><a href="./index.php?controller=atenciones&action=index"><span class="glyphicon glyphicon-user"></span>Graficos</a></li>
+                            <li><a href="./index.php?controller=atenciones&action=index"><span class="glyphicon glyphicon-user"></span>Atenciones</a></li>
                             <?php
                         }
-                        if ($_SESSION['session']['idRol'] == '2') {
+                        if ($_SESSION['session']['idRol'] == '2') { //GERENTE
                             ?>  
-                             <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
+                            <li><a href="./index.php?controller=clientes&action=index"><span class="glyphicon glyphicon-user"></span>Clientes</a></li>
+                            <li><a href="./index.php?controller=abogados&action=index"><span class="glyphicon glyphicon-user"></span>Abogados</a></li>
+                            <li><a href="./index.php?controller=graficos&action=index"><span class="glyphicon glyphicon-user"></span>Graficos</a></li>
+                            <li><a href="./index.php?controller=atenciones&action=index"><span class="glyphicon glyphicon-user"></span>Atenciones</a></li>
                            
+                            
                             <?php
                         }
-                        if ($_SESSION['session']['idRol'] == '3') {
+                        if ($_SESSION['session']['idRol'] == '3') { //ADMINISTRADOR
                             ?>  
-                            <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
+                            
+                            <li><a href="./index.php?controller=usuarios&action=index"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
+                            <li><a href="./index.php?controller=clientes&action=index"><span class="glyphicon glyphicon-user"></span>Clientes</a></li>
+                            <li><a href="./index.php?controller=abogados&action=index"><span class="glyphicon glyphicon-user"></span>Abogados</a></li>
+                            
                             <?php
                         }
-                        if ($_SESSION['session']['idRol'] == '4') {
+                        if ($_SESSION['session']['idRol'] == '4') { //SECRETARIA
                             ?>  
-                            <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
+                            <li><a href="./index.php?controller=clientes&action=index"><span class="glyphicon glyphicon-user"></span>Clientes</a></li>
+                            <li><a href="./index.php?controller=abogados&action=index"><span class="glyphicon glyphicon-user"></span>Abogados</a></li>
+                            <li><a href="./index.php?controller=atenciones&action=index"><span class="glyphicon glyphicon-user"></span>Atenciones</a></li>
                             <?php
                         }
-                        if ($_SESSION['session']['idRol'] == '5') {
-                            ?>    
-                            <li><a href="./index.php?controller=index"><span class="glyphicon glyphicon-home"></span>Inicio</a></li> 
+                        if ($_SESSION['session']['idRol'] == '5') { //CLIENTE
+                            ?> 
+                            <li><a href="./index.php?controller=atenciones&action=index"><span class="glyphicon glyphicon-user"></span>Atenciones</a></li>
                             <?php
                         }
                     }

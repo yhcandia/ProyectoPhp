@@ -34,7 +34,7 @@ textarea:not(.basic) {
     display: inline-block;
     font-size: 17px;
     padding: 12px 16px;
-    width: 210px;
+    width: 292px;
 }
 input[type=text]:focus:not(.basic),
 input[type=tel]:focus:not(.basic),

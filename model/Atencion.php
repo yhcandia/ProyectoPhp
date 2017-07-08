@@ -73,9 +73,12 @@ class Atencion extends EntidadBase{
 
     }
     public function update(){
-     $query="UPDATE atencion SET "
-             . "estado = '$this->estado' where id_atencion= '$this->id'";
-     $update=$this->db()->query($query);
+     $query = "UPDATE atencion SET "
+                . "fecha_atencion = '$this->fecha',"
+                . "cliente_id = '$this->cliente_id',"
+                . "abogado_id = '$this->abogado_id',"
+                . "estado = '$this->estado' where id_atencion= '$this->id'";
+        $update = $this->db()->query($query);
         $this->db()->error;
         return $update;
     }

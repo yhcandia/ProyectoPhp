@@ -26,7 +26,20 @@
               <input type="Password" name="npassword" placeholder="Contraseña" required>
 
             </div>
+           
             <div class="field_container">
+                <select name="tipo"  required/>                                           
+                <option value="">-- Seleccione tipo de usuario --</option>
+                <option value="1">SUPER ADMINISTRADOR</option>
+                <option value="2">GERENTE</option>
+                <option value="3">ADMINISTRADOR</option>
+                <option value="4">SECRETARIA</option>
+                <option value="5">CLIENTE</option>
+                </select>
+                
+
+            </div> 
+             <div class="field_container">
 
                 <label><?php echo "<font color=red>{$error}</font>"; ?></label> 
 

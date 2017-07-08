@@ -40,7 +40,7 @@ class UsuariosController extends ControladorBase {
             $oUsu = new Usuario($this->adapter);
             $oUsu->setRut($_REQUEST["nnombre"]);
             $oUsu->setClave(md5($_REQUEST["npassword"]));
-            if ($oUsu->VerificaUsuarioClave()) {
+            if ($oUsu->VerificaUsuarioClaveWTipo($_REQUEST["tipo"])) {
                 //echo "Todo bien";
                 $_SESSION["session"]["nombreUsuario"] = $oUsu->getNombre();
                 $_SESSION["session"]["idRol"] = $oUsu->getIdperfil();
@@ -121,7 +121,7 @@ class UsuariosController extends ControladorBase {
         $res = $this->adapter->query($query);
 
         $num_registros = mysqli_num_rows($res);
-        $resul_x_pagina = 3;
+        $resul_x_pagina = 5;
 
         $paginacion = new Zebra_Pagination();
         $paginacion->records($num_registros);
@@ -166,7 +166,7 @@ class UsuariosController extends ControladorBase {
             $res = $this->adapter->query($query);
             $num_registros = mysqli_num_rows($res);
 
-            $resul_x_pagina = 3;
+            $resul_x_pagina = 5;
 
             $paginacion = new Zebra_Pagination();
             $paginacion->records($num_registros);

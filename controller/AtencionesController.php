@@ -19,31 +19,28 @@ class AtencionesController extends ControladorBase {
     public function index() {
 
         if (isset($_SESSION['session'])) {
-            if ($_SESSION["session"]["idRol"] == "1") {
+            if ($_SESSION["session"]["idRol"] != "5") {
 
                 if (isset($_SESSION["buscado"]) && isset($_SESSION["buscarpor"])) {
                     unset($_SESSION["buscado"]);
                     unset($_SESSION["buscarpor"]);
-                    if(isset($_SESSION["num_registros"])){
-                        unset($_SESSION["num_registros"]);
-                       
-                        
-                    }else{
-                       $this->verificador() ;
-                    }
-                    $this->mostrarAtenciones();
+                   $this->verificador() ;
+                   $this->mostrarAtenciones();
                 } else {
-                    if(isset($_SESSION["num_registros"])){
-                        unset($_SESSION["num_registros"]);
-                         
-                    }else{
-                       $this->verificador() ;
-                    }
+                    $this->verificador() ;
                     $this->mostrarAtenciones();
+                }
+            }else{
+                if (isset($_SESSION["buscado"]) && isset($_SESSION["buscarpor"])) {
+                    unset($_SESSION["buscado"]);
+                    unset($_SESSION["buscarpor"]);
+                    $this->misAtenciones();
+                } else {
+                  $this->misAtenciones();
                 }
             }
         }
-        $this->mostrarAtenciones();
+       
     }
 
     public function login() {
@@ -104,7 +101,19 @@ class AtencionesController extends ControladorBase {
             $atencion = new Atencion($this->adapter);
             $atencion->setId($_REQUEST["id"]);
             $atencion->setEstado($_REQUEST["estado"]);
+            
+            $date=$_REQUEST["fecha"];
+            $time=$_REQUEST["time"];
+            $id_cliente=$_REQUEST["idcliente"];
+            $id_abogado=$_REQUEST["idabogado"];
+            $fechadatetime=$atencion->fechayhora($date,$time);
+            $atencion->setAbogado_id($id_abogado);
+            $atencion->setCliente_id($id_cliente);
+            $atencion->setFecha($fechadatetime);
+            
             $up=$atencion->update();
+            
+            
             
         }
         $this->redirect("Atenciones", "index");
@@ -139,13 +148,13 @@ class AtencionesController extends ControladorBase {
         $res = $this->adapter->query($query);
         $num_registros = mysqli_num_rows($res);
         if ($num_registros == 0) {
-            $this->redirect("Atenciones", "index");
-            $_SESSION["num_registros"]=0;
+            return NULL;
             } else {
                 while ($roww = $res->fetch_object()) {
                     $resultSet2[] = $roww;
                 }
                 $arreglo=array();
+                $arreglocon=array();
                 foreach ($resultSet2 as $row){
                     $date =$row->fecha_atencion;
                     
@@ -165,30 +174,49 @@ class AtencionesController extends ControladorBase {
                     
                     if($ano==$anoactual){
                     if($diferencia<3){
-                        if($diferencia<2 && $row->estado!="CONFIRMADA" && $row->estado!="REALIZADA"){
-                            $objat=new Atencion($this->adapter);
-                            $objat->setId($row->id_atencion);
-                            $objat->setEstado("ANULADA");
-                            $objat->update();
-                            
+                        if($diferencia==-1){
+                           if($row->estado=="CONFIRMADA"){
+                                array_push($arreglocon, $row->id_atencion);
+                            } 
                         }else{
-                            if($diferencia=2 && $row->estado!="CONFIRMADA" && $row->estado!="REALIZADA"){
-                            array_push($arreglo, $row->id_atencion);
+                            if($diferencia < -1 && $row->estado=="CONFIRMADA"){
+                                $objat=new Atencion($this->adapter);
+                                $objat->setId($row->id_atencion);
+                                $objat->setEstado("PERDIDA");
+                                $objat->update();
+                            }else{
+                            if($diferencia<2 && $row->estado!="CONFIRMADA" && $row->estado!="REALIZADA"){
+                                $objat=new Atencion($this->adapter);
+                                $objat->setId($row->id_atencion);
+                                $objat->setEstado("ANULADA");
+                                $objat->update();
+
+                            }else{
+                                if($diferencia=2 && $row->estado!="CONFIRMADA" && $row->estado!="REALIZADA"){
+                                array_push($arreglo, $row->id_atencion);
+                                }
+
+                                // $_SESSION["mensaje"]="La atencion de id = ".$row->id_atencion." debe ser confirmada";
                             }
-                            // $_SESSION["mensaje"]="La atencion de id = ".$row->id_atencion." debe ser confirmada";
+                            }
                         }
                     }
                     if(!empty($arreglo)){
                          $_SESSION["debemodificar"]=$arreglo;
                     }
+                    if(!empty($arreglocon)){
+                         $_SESSION["debeconfirmar"]=$arreglocon;
+                    }
                    // print_r ($diferencia);
                     //print_r ($diaactual);
                     }else{
                         if($ano<$anoactual){
+                            if($row->estado!="REALIZADA"){
                             $objat=new Atencion($this->adapter);
                             $objat->setId($row->id_atencion);
                             $objat->setEstado("ANULADA");
                             $objat->update();
+                            }
                         }
                     }
                 }
@@ -258,7 +286,7 @@ class AtencionesController extends ControladorBase {
        
     }
 
-    public function buscarNombreUsuario() {
+    public function buscarNombre() {
         if (isset($_REQUEST["name"]) || isset($_SESSION['buscado'])) {
             if (isset($_REQUEST["name"]) && isset($_REQUEST["buscarpor"])) {
                 $name = utf8_encode($_REQUEST['name']);
@@ -269,46 +297,154 @@ class AtencionesController extends ControladorBase {
                 $name = trim($name);
                 $buscarpor = $_SESSION['buscarpor'];
             }
-            $query = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC";
-            $res = $this->adapter->query($query);
-            $num_registros = mysqli_num_rows($res);
+            if ($_SESSION["session"]["idRol"] != "5") {
+                $query = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                        . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                        . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                        . "INNER JOIN abogado on atencion.abogado_id=abogado.id"
+                        . " WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC";
+                $res = $this->adapter->query($query);
+                $num_registros = mysqli_num_rows($res);
 
-            $resul_x_pagina = 3;
+                $resul_x_pagina = 5;
 
-            $paginacion = new Zebra_Pagination();
-            $paginacion->records($num_registros);
-            $paginacion->records_per_page($resul_x_pagina);
+                $paginacion = new Zebra_Pagination();
+                $paginacion->records($num_registros);
+                $paginacion->records_per_page($resul_x_pagina);
 
-            $consulta = "SELECT * FROM usuario INNER JOIN perfil on usuario.perfil_idperfil=perfil.idperfil WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
-            $result = $this->adapter->query($consulta);
-            $allperfiles = $this->adapter->query("SELECT * FROM perfil");
-            while ($row = $allperfiles->fetch_object()) {
-                $resultSet[] = $row;
-            }
+                $consulta = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                        . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                        . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                        . "INNER JOIN abogado on atencion.abogado_id=abogado.id"
+                        . " WHERE " . $buscarpor . " LIKE '%" . $name . "%' ORDER BY " . $buscarpor . " ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
+                $result = $this->adapter->query($consulta);
+                $allabogados = $this->adapter->query("SELECT * FROM abogado");
+                while ($row = $allabogados->fetch_object()) {
+                    $resultSetAbo[] = $row;
+                }
+                $allclientes = $this->adapter->query("SELECT * FROM cliente");
+                while ($rowww = $allclientes->fetch_object()) {
+                    $resultSetCli[] = $rowww;
+                }
 
-            $_SESSION['buscado'] = $name;
-            $_SESSION['buscarpor'] = $buscarpor;
-            if ($num_registros == 0) {
-                $this->view("usuario", array(
+                $_SESSION['buscado'] = $name;
+                $_SESSION['buscarpor'] = $buscarpor;
+                if ($num_registros == 0) {
+                    $this->view("atencion", array(
+                        "paginacion" => $paginacion,
+                        "num_registros" => $num_registros,
+                        "result" => NULL,
+                        "abogados" => $resultSetAbo,
+                        "clientes" => $resultSetCli
+                    ));
+                } else {
+                    while ($roww = $result->fetch_object()) {
+                        $resultSet2[] = $roww;
+                    }
+                    $this->view("atencion", array(
+                        "paginacion" => $paginacion,
+                        "num_registros" => $num_registros,
+                        "result" => $resultSet2,
+                        "abogados" => $resultSetAbo,
+                        "clientes" => $resultSetCli
+                    ));
+                }
+            }else{
+                $rut = '"' . $_SESSION["session"]["rutUsuario"] . '"';
+                $query = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                        . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                        . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                        . "INNER JOIN abogado on atencion.abogado_id=abogado.id"
+                        . " WHERE " . $buscarpor . " LIKE '%" . $name . "%' and cliente.rut = $rut ORDER BY " . $buscarpor . " ASC";
+                $res = $this->adapter->query($query);
+                $num_registros = mysqli_num_rows($res);
+
+                $resul_x_pagina = 5;
+
+                $paginacion = new Zebra_Pagination();
+                $paginacion->records($num_registros);
+                $paginacion->records_per_page($resul_x_pagina);
+
+                $consulta = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                        . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                        . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                        . "INNER JOIN abogado on atencion.abogado_id=abogado.id"
+                        . " WHERE " . $buscarpor . " LIKE '%" . $name . "%' and cliente.rut = $rut ORDER BY " . $buscarpor . " ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . "," . $resul_x_pagina;
+                $result = $this->adapter->query($consulta);
+                
+                $_SESSION['buscado'] = $name;
+                $_SESSION['buscarpor'] = $buscarpor;
+                  if ($num_registros == 0) {
+                $this->view("atencion", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
-                    "result" => NULL,
-                    "perfiles" => $resultSet
+                    "result" => NULL
+                   
                 ));
             } else {
                 while ($roww = $result->fetch_object()) {
                     $resultSet2[] = $roww;
                 }
-                $this->view("usuario", array(
+                $this->view("atencion", array(
                     "paginacion" => $paginacion,
                     "num_registros" => $num_registros,
-                    "result" => $resultSet2,
-                    "perfiles" => $resultSet
+                    "result" => $resultSet2
                 ));
             }
+            }
         } else {
-            $this->redirect("Usuarios", "mostrarUsuarios");
+            if ($_SESSION["session"]["idRol"] != "5") {
+            $this->redirect("Atenciones", "mostrarAtenciones");
+            }else{
+                $this->redirect("Atenciones", "misAtenciones");
+            }
         }
+    }
+
+    public function misAtenciones() {
+        $rut = '"' . $_SESSION["session"]["rutUsuario"] . '"';
+        $query = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                . "INNER JOIN abogado on atencion.abogado_id=abogado.id "
+                . "WHERE cliente.rut = $rut"
+                . " ORDER BY id_atencion ASC";
+        $res = $this->adapter->query($query);
+        
+        $num_registros = mysqli_num_rows($res);
+        $resul_x_pagina = 5;
+
+        $paginacion = new Zebra_Pagination();
+        $paginacion->records($num_registros);
+        $paginacion->records_per_page($resul_x_pagina);
+
+        $consulta = "SELECT *,cliente.rut as rut_cliente ,abogado.rut as rut_abogado,"
+                . "abogado.nombre_completo as nombre_abogado, cliente.nombre_completo as nombre_cliente "
+                . "FROM atencion INNER JOIN cliente on atencion.cliente_id=cliente.id "
+                . "INNER JOIN abogado on atencion.abogado_id=abogado.id "
+                . "WHERE cliente.rut = $rut"
+                . " ORDER BY id_atencion ASC LIMIT " . (($paginacion->get_page() - 1) * $resul_x_pagina) . ',' . $resul_x_pagina;
+        $result = $this->adapter->query($consulta);
+        /* while ($row = $result->fetch_object()) {
+          $resultSet[]=$row;
+          } */
+        if ($num_registros == 0) {
+                $this->view("atencion", array(
+                    "paginacion" => $paginacion,
+                    "num_registros" => $num_registros,
+                    "result" => NULL
+                   
+                ));
+            } else {
+                while ($roww = $result->fetch_object()) {
+                    $resultSet2[] = $roww;
+                }
+                $this->view("atencion", array(
+                    "paginacion" => $paginacion,
+                    "num_registros" => $num_registros,
+                    "result" => $resultSet2
+                ));
+            }
     }
 
 }
