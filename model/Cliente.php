@@ -90,8 +90,8 @@ class Cliente extends EntidadBase{
         $query2="UPDATE usuario SET "
                 . "rut = '$this->rut',"
                 . "nombreusuario = '$this->nombrecliente',"
-                . "clave = '$this->clave',"
-                . "perfil_idperfil = '$this->idperfil' where rut= '$this->rut'";
+                . "clave = '$this->clave'"
+                . " where rut= '$this->rut'";
         $update2=$this->db()->query($query2);
         $this->db()->error;
         $update=$this->db()->query($query);
